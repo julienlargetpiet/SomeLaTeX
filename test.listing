@@ -1,0 +1,8 @@
+#include <iostream.h>
+
+int main() {
+    std::string x = "this is a string";
+    std::cout << x << "\n";
+    // comment
+    return 0;
+}
