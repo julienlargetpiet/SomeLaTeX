@@ -37,7 +37,7 @@
 \usetikzlibrary{intersections} 
 \usetikzlibrary{trees} % you know its use just by its name lol
 \usetikzlibrary{3d} % enables 3d coordinates system
-%\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{shapes.geometric}
 
 %%%%%%% hyperref %%%%%%%
 \hypersetup{colorlinks = true,
@@ -1334,6 +1334,49 @@ En fait j'ai pas réusii, il vaut mieux générer la structure statique avec pyt
           inner sep=0pt] (Y) at (6,0) {B};
 
     \draw[->] (Z) -- (Y);
+
+\end{tikzpicture}
+
+Another example:
+
+\begin{tikzpicture}[
+    % Global style for all nodes
+    every node/.style={
+        draw,
+        minimum size=2.1cm,
+        inner sep=0pt,
+        align=center
+    },
+    edgeLabel/.style={
+        draw=none,
+        fill=none,
+        minimum size=0pt,
+        inner sep=2pt,
+        font=\small
+    },
+    % Custom styles
+    circleNode/.style={circle, fill=blue!20},
+    rectNode/.style={rectangle, fill=green!20},
+    diamondNode/.style={diamond, aspect=2, fill=orange!20},
+    arrow/.style={->, thick}
+]
+
+    % Main nodes
+    \node[circleNode] (Z) at (0,0) {Start};
+    \node[diamondNode] (D) at (4,0) {Condition};
+    \node[rectNode] (Y) at (8,2) {Action 1};
+    \node[rectNode] (W) at (8,-2) {Action 2};
+    
+    % Extra node
+    \node[rectNode] (End) at (12,0) {End};
+    
+    % Connections
+    \draw[arrow] (Z) -- (D);
+    \draw[arrow] (D) -- node[edgeLabel, above]{Yes} (Y);
+    \draw[arrow] (D) -- node[edgeLabel, below]{No} (W);
+    
+    \draw[arrow] (Y) -- (End);
+    \draw[arrow] (W) -- (End);
 
 \end{tikzpicture}
 
