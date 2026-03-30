@@ -31,7 +31,7 @@
 \usepackage{pgf-pie}     % pie-chart
 \usepackage{xstring}     % beter for string programming
 \usepackage{chemfig}     % for drawing molecules
-%\usepackage{pgfplotstable} %read csv to build pie
+\usepackage{pgfplotstable} %read csv 
 
 % for \path[name intersections={of=f and g}];
 \usetikzlibrary{intersections} 
@@ -129,8 +129,23 @@
 
 \usepgfplotslibrary{fillbetween}
 \usepgfplotslibrary{statistics}
+% \usepgfplotslibrary{colormaps} %cool theme colormap/themename
 
 \pgfplotsset{compat=1.18}
+
+\pgfplotsset{ %define custom pgfplot theme, heatmap
+  colormap={inferno}{
+    rgb255(0cm)=(0,0,4);
+    rgb255(1cm)=(31,12,72);
+    rgb255(2cm)=(85,15,109);
+    rgb255(3cm)=(136,34,106);
+    rgb255(4cm)=(186,54,85);
+    rgb255(5cm)=(227,89,51);
+    rgb255(6cm)=(249,140,10);
+    rgb255(7cm)=(249,201,50);
+    rgb255(8cm)=(252,255,164);
+  }
+}
 
 \title{Doc}
 \author{J LP}
@@ -1000,6 +1015,77 @@ En fait j'ai pas réusii, il vaut mieux générer la structure statique avec pyt
 \end{axis}
 \end{tikzpicture}
 
+\subsubsection{Scatterplot - CSV - Operations inside Table}
+
+\begin{tikzpicture}
+\begin{axis}[xlabel=$x$,
+             ylabel=$y$,
+             domain=-2:2,
+             grid=both,
+             legend pos=north west,
+             width=10cm,
+             height=6cm]
+
+    \addplot[mark=*,
+             only marks,
+             color=red!40!black] table[col sep=comma,
+                                       x=x,
+                                       y expr=\thisrow{y} * 2 + \thisrow{y2}] {scatterplot.csv};
+
+    \addplot[mark=*,
+             only marks,
+             color=blue!45] table[col sep=comma,
+                                  x=x,
+                                  y expr=\thisrow{y} * 2 * \thisrow{y2}] {scatterplot.csv};
+
+    \addplot[mark=*,
+             only marks,
+             color=green!40] table[col sep=comma,
+                                    x=x,
+                                    y expr=\thisrow{y} * 2 + 2 * \thisrow{y2},
+                                    restrict expr to domain={\thisrow{x}}{0:2}] {scatterplot.csv};
+                            % `restrict expr to domain` expects two arguments:
+                            %   1) an expression (here: \thisrow{x})
+                            %   2) a domain interval (here: 0:2)
+                            % Braces are required to delimit each argument explicitly,
+                            % especially since \thisrow{x} is itself a macro with its own argument.
+                            % So we write {\thisrow{x}}{0:2} to avoid ambiguity in TeX parsing.
+
+\end{axis}
+\end{tikzpicture}
+
+\subsubsection{Scatterplot - CSV - Store in memory + Vertical concat}
+ 
+\begin{tikzpicture}
+\begin{axis}[xlabel=$x$,
+             ylabel=$y$,
+             domain=-2:8,
+             grid=both,
+             legend pos=north west,
+             width=10cm,
+             height=6cm]
+
+    % global tables
+    \pgfplotstableread[col sep=comma]{scatterplot.csv}\mytable
+
+    \pgfplotstableread[col sep=comma]{scatterplot2.csv}\mytableB
+
+    %concat mytableB to mytable
+    \pgfplotstablevertcat{\mytable}{\mytableB}
+
+    \pgfplotstablecreatecol[
+        create col/expr={\thisrow{y}^2 - \thisrow{y2}}
+    ]{y3}{\mytable}
+
+    \addplot[mark=*,
+             only marks,
+             color=blue!45] table[col sep=comma,
+                                  x=x,
+                                  y expr=\thisrow{y3} * 2\thisrow{y2}] {\mytable};
+
+
+\end{axis}
+\end{tikzpicture}
 
 \subsubsection{Intersections}
 
@@ -1248,17 +1334,89 @@ En fait j'ai pas réusii, il vaut mieux générer la structure statique avec pyt
     ]{10/A, 35/B, 55/C}
 \end{tikzpicture}
 
-%\subsubsection{With CSV}
-%
+\subsubsection{With CSV}
+
 %\begin{tikzpicture}
 %
 %    \pie[
 %        color={blue!20, red!20,purple!20},
 %        text=pin,
 %        explode=0.1
-%    ] {\result}
+%    ]table[col sep=comma, label=label, value=value] {pie.csv}
 %
 %\end{tikzpicture}
+
+\subsection{HeatMaps}
+
+\subsubsection{Color interpolation}
+
+\begin{tikzpicture}
+\begin{axis}[colorbar, 
+             colormap name = viridis]
+
+    % matrix plot* do color interpolation, it means that a cell colored is given
+    % but still can get influenced by neighboors
+    \addplot[matrix plot*,
+             mesh/cols=3,
+             point meta=explicit] coordinates {
+        (0,0) [4] (1,0) [14] (2,0) [13]
+        (0,1) [13] (1,1) [13] (2,1) [14]
+        (0,2) [13] (1,2) [4] (2,2) [5]
+    };
+
+\end{axis}
+\end{tikzpicture}
+
+\section{3D graphs}
+
+\begin{tikzpicture}
+    \begin{axis}[colorbar,
+                colormap name=inferno]
+
+    \addplot3[surf,
+              domain=-2:2, 
+              y domain = -2:2,
+              samples=30,
+              samples y=30
+    ]{sin(deg(x)) * cos(deg(x))};
+
+\end{axis}
+\end{tikzpicture}
+
+\subsubsection{Fixed color}
+
+\begin{tikzpicture}
+\begin{axis}[colorbar, 
+             colormap name=viridis]
+
+    \addplot[matrix plot,
+             mesh/cols=3,
+             point meta=explicit] coordinates {
+        (0,0) [4] (1,0) [14] (2,0) [13]
+        (0,1) [13] (1,1) [13] (2,1) [14]
+        (0,2) [13] (1,2) [4] (2,2) [5]
+    };
+
+\end{axis}
+\end{tikzpicture}
+
+\subsubsection{CSV}
+ 
+\begin{tikzpicture}
+\begin{axis}[colorbar, 
+             colormap name=inferno]
+
+    \addplot[matrix plot,
+             mesh/cols=3,
+             point meta=explicit
+    ] table[col sep=comma, 
+            x=x,
+            y=y,
+            meta=value] {heatmap.csv};
+
+\end{axis}
+\end{tikzpicture}
+
 
 \section{Tikz - Shapes}
 
@@ -1402,24 +1560,70 @@ Another example:
 
 \begin{tikzpicture}
 
-\fill[gray!20] (0,0,0) -- (2,0,0) -- (2,2,0) -- (0,2,0) -- cycle;
-
-
-\draw (0,0,0) -- (2,0,0) -- (2,2,0) -- (0,2,0) -- cycle;
-\draw (0,0,2) -- (2,0,2) -- (2,2,2) -- (0,2,2) -- cycle;
-
-\draw (0,0,0) -- (0,0,2);
-\draw (2,0,0) -- (2,0,2);
-\draw (2,2,0) -- (2,2,2);
-\draw (0,2,0) -- (0,2,2);
+    \fill[gray!20] (0,0,0) -- (2,0,0) -- (2,2,0) -- (0,2,0) -- cycle;
+    
+    
+    \draw (0,0,0) -- (2,0,0) -- (2,2,0) -- (0,2,0) -- cycle;
+    \draw (0,0,2) -- (2,0,2) -- (2,2,2) -- (0,2,2) -- cycle;
+    
+    \draw (0,0,0) -- (0,0,2);
+    \draw (2,0,0) -- (2,0,2);
+    \draw (2,2,0) -- (2,2,2);
+    \draw (0,2,0) -- (0,2,2);
 
 \end{tikzpicture}
 
 \subsubsection{Camera angles}
 
-\begin{tikzpicture}[rotate around x=30, rotate around z=45]
-\draw (0,0,0) -- (2,0,0);
+Here we deonstrate the importance of rotation composition order.
+
+If we srite:
+
+rotate around x
+rotate around y
+rotate around z
+
+It will be this composition:
+
+rotate\_x(rotate\_y(rotate\_z()))
+
+Rotating a line that is perfectly aligned to axis X around X changes nothing (logic).
+
+So in that is why second and third figures are the same, because in the third figure, rotating around x happens first and does nothing, so still jut y rotation that is the same at what the second figure does.
+
+Also the first figure rotate x last, so even if the rotation angle are the same for y and we just said that rotating around x does nothing in this case (because the line is perfectly parallel tp x), the composition order is y then x, that is why it gave a different result.
+
+\begin{tikzpicture}[rotate around x=45,
+                    rotate around y=45,
+                    rotate around z=0
+                    ]
+    \draw (0,0,0) -- (2,0,0);
+
 \end{tikzpicture}
+
+\begin{tikzpicture}[rotate around x=0,
+                    rotate around y=45,
+                    rotate around z=0
+                    ]
+    \draw (0,0,0) -- (2,0,0);
+
+\end{tikzpicture}
+
+\begin{tikzpicture}[rotate around y=45,
+                    rotate around x=45,
+                    rotate around z=0
+                    ]
+    \draw (0,0,0) -- (2,0,0);
+
+\end{tikzpicture}
+
+\begin{tikzpicture}[rotate around x=0,
+                    rotate around y=0,
+                    rotate around z=45
+                    ]
+    \draw (0,0,0) -- (2,0,0);
+\end{tikzpicture}
+
 
 Another example:
 
@@ -1438,9 +1642,73 @@ Another example:
 
 \section{For chemists}
 
+\subsection{Simple links}
+
+\chemfig{C-C-O}
+
+\subsection{Links types}
+
+\chemfig{C-C}
+
+\chemfig{C=C}
+
+\chemfig{C~C}
+
+\subsection{Links Angles}
+
+\chemfig{-[:30]C-[:60]=O}
+\chemfig{(H-)(H-)C(-H)(-[:55]H)-[:30]C=[:60]O}
+
+\chemfig{C(=[:30]O)
+          (=[:270]O)
+          (=[:300]
+             (H-)
+             I
+             (-H))
+         -C
+         }
+
+Isopropanol:
+
+\chemfig{
+    CH_3-CH(-[:90]OH)-CH_3
+}
+
+\subsection{Rings}
+
+Cyclohexane:
+
+\chemfig{
+    *6(------)
+}
+
+Benzene:
+
+\chemfig{
+    *6(-=-=-=)
+}
+
+Another example:
+
+\chemfig{
+    *6(-(-CH_3)=-(-OH)-=-)
+}
+
+\subsection{Charges}
+
+\chemfig{N^\oplus}
+
+\chemfig{O^\ominus} 
+
+% to not collide with specific chemfig DSL link synthax, group the minus like "{-}"
+% so now "-" is just a character, not a special chemfig synthax 
+\chemfig{O^{-}} 
+\chemfig{O^{+}} 
 
 
 \end{document}
+
+
 
 
 
