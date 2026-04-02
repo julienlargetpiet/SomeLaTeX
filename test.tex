@@ -23,7 +23,7 @@
 \usepackage{microtype}   % better micro spacing (letters/words)
 \usepackage{fancyhdr}    % page headers
 \usepackage{titlesec}    % used for sections style here, \titleformat
-\usepackage{xcolor}      % coors text with \textcolor
+\usepackage[table]{xcolor}      % coors text with \textcolor - [table] means extra load of function like \rowcolor...
 \usepackage{tcolorbox}   % used to highlight text, literaly a colored box
 \usepackage{listings}    % used for code-blocks
 \usepackage{minted}      % used for code-blocks (alterntive) - more powerfull but rely on python - require `pdflatex -shell-escape file.tex`
@@ -32,12 +32,20 @@
 \usepackage{xstring}     % beter for string programming
 \usepackage{chemfig}     % for drawing molecules
 \usepackage{pgfplotstable} %read csv 
+\usepackage{booktabs} % nicer tabs
 
 % for \path[name intersections={of=f and g}];
 \usetikzlibrary{intersections} 
 \usetikzlibrary{trees} % you know its use just by its name lol
 \usetikzlibrary{3d} % enables 3d coordinates system
 \usetikzlibrary{shapes.geometric}
+\usetikzlibrary{graphs}
+\usetikzlibrary{graphdrawing}
+
+\usegdlibrary{trees} % from graphdrawning
+\usegdlibrary{force}
+
+\usepgfplotslibrary{ternary} % ternary diagramm
 
 %%%%%%% hyperref %%%%%%%
 \hypersetup{colorlinks = true,
@@ -428,6 +436,73 @@ Numbered Lists:
 \hline
 \end{tabular}
 
+\subsection{Cell color}
+
+\begin{tabular}{|c|c|}
+\hline
+    \cellcolor{red!30} A & B \\
+\hline
+    C & \cellcolor{blue!30} D \\
+\hline
+\end{tabular}
+
+\subsection{Row color}
+
+\begin{tabular}{|c|c|}
+\hline
+    \rowcolor{red!30} 
+    A & B \\
+\hline
+    \rowcolor{blue!30} 
+    C & D \\
+\hline
+\end{tabular}
+
+\subsection{Column color}
+
+\begin{tabular}{|>{\columncolor{blue!30}}c|>{\columncolor{red!30}}c|}
+\hline
+    A & B \\
+\hline
+    C & D \\
+\hline
+\end{tabular}
+
+\subsection{Alternate row color}
+
+\rowcolors{1}{gray!20}{white}
+
+\begin{tabular}{|c|c|}
+\hline
+    A & B \\
+\hline
+    C & D \\
+\hline
+    E & F \\
+\hline
+\end{tabular}
+
+\subsection{Booktabs}
+
+\rowcolors{1}{white}{white} %reset
+
+\begin{tabular}{cc}
+\toprule
+A & B \\
+\midrule
+C & D \\
+E & F \\
+C & D \\
+E & F \\
+C & D \\
+E & F \\
+C & D \\
+E & F \\
+C & D \\
+E & F \\
+\bottomrule
+\end{tabular}
+
 \section{Images}
 
 %\begin{figure}[H]
@@ -689,6 +764,50 @@ NOT EMPTY
 
 \end{tikzpicture}
 
+\section{For Graph Theorists}
+
+With LuaLaTeX
+
+\begin{tikzpicture}
+
+    \graph{
+        A -- B -- C -- A;
+    };
+
+\end{tikzpicture}
+
+\begin{tikzpicture}
+
+    \graph[spring layout]{
+        A -- B -- C -- D -- A;
+        A -- C;
+    };
+
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+
+    \graph [tree layout] {
+        A -> {B, C, D};
+        B -> {E, F};
+    };
+
+\end{tikzpicture}
+
+Base Tree, no TikZ extra lib needed, workd with pdflatex 
+
+\begin{tikzpicture}
+
+    \node{A} 
+        child {node {B}}
+        child {node{C}
+                   child {node{D}}
+                   child {node{E}}
+              };
+
+\end{tikzpicture}
+
 
 \subsubsection{L'arbre prend forme}
 
@@ -776,7 +895,7 @@ En fait j'ai pas réusii, il vaut mieux générer la structure statique avec pyt
 \include{ici.tex}
 \include{ici2.tex}
 
-\section{Tikz}
+\section{Tikz - Preliminary}
 
 \begin{tikzpicture}
 \begin{axis}
@@ -1367,22 +1486,6 @@ En fait j'ai pas réusii, il vaut mieux générer la structure statique avec pyt
 \end{axis}
 \end{tikzpicture}
 
-\section{3D graphs}
-
-\begin{tikzpicture}
-    \begin{axis}[colorbar,
-                colormap name=inferno]
-
-    \addplot3[surf,
-              domain=-2:2, 
-              y domain = -2:2,
-              samples=30,
-              samples y=30
-    ]{sin(deg(x)) * cos(deg(x))};
-
-\end{axis}
-\end{tikzpicture}
-
 \subsubsection{Fixed color}
 
 \begin{tikzpicture}
@@ -1417,6 +1520,26 @@ En fait j'ai pas réusii, il vaut mieux générer la structure statique avec pyt
 \end{axis}
 \end{tikzpicture}
 
+\section{3D graphs - Preliminary}
+
+Here the vertical line is Z, the horizontal is the X, the depth is the Y
+
+\begin{tikzpicture}
+\begin{axis}[xlabel=$x$,
+             ylabel=$y$,
+             zlabel=$z$,
+             colorbar,
+             colormap name=inferno]
+
+    \addplot3[surf,
+              domain=-2:2, 
+              y domain = -2:2,
+              samples=30, % samples -> how accurate it is (you can choose x and y samples / intervals)
+              samples y=30
+    ]{sin(deg(x)) * cos(deg(x))};
+
+\end{axis}
+\end{tikzpicture}
 
 \section{Tikz - Shapes}
 
@@ -1550,13 +1673,15 @@ Another example:
 
 \end{tikzpicture}
 
-\subsection{3D}
+\subsection{Shapes - 3D}
 
 \begin{tikzpicture}
 \draw[->] (0,0,0) -- (2,0,0); % x axis
 \draw[->] (0,0,0) -- (0,2,0); % y axis
 \draw[->] (0,0,0) -- (0,0,2); % z axis
 \end{tikzpicture}
+
+\subsection{Cube}
 
 \begin{tikzpicture}
 
@@ -1572,6 +1697,132 @@ Another example:
     \draw (0,2,0) -- (0,2,2);
 
 \end{tikzpicture}
+
+\subsection{Pyramid \& and the tweak of 3D projections}
+
+Basic, default projections
+
+\begin{tikzpicture}
+\begin{scope}
+
+    \coordinate (A) at (0,0,0);
+    \coordinate (B) at (2,0,0);
+    \coordinate (C) at (2,2,0);
+    \coordinate (D) at (0,2,0);
+    
+    \coordinate (S) at (1,1,2);
+    
+    \fill[gray!20] (A) -- (B) -- (C) -- (D) -- cycle;
+    \fill[gray!30] (S) -- (A) -- (B) -- cycle;
+    \fill[gray!40] (S) -- (B) -- (C) -- cycle;
+    \fill[gray!25] (S) -- (C) -- (D) -- cycle;
+    
+    \draw (A) -- (B) -- (C) -- (D) -- cycle;
+    \draw (S) -- (A);
+    \draw (S) -- (B);
+    \draw (S) -- (C);
+    \draw[dashed] (S) -- (D); % hidden edge
+
+\end{scope}
+\end{tikzpicture}
+
+Tweaked projection
+
+\begin{tikzpicture}
+\begin{scope}[x={(1.2cm,0cm)}, % moving by 1 X unit -> moves right by 1cm and do not moves up or down
+              y={(0.5cm,0.5cm)}, % moving by one Y unit -> moves right by 0.5cm and up by 0.5cm
+              z={(0cm,1cm)}] % moving by 1 Z unit -> moves right by 0cm and up by 1cm
+
+    \coordinate (A) at (0,0,0);
+    \coordinate (B) at (2,0,0);
+    \coordinate (C) at (2,2,0);
+    \coordinate (D) at (0,2,0);
+    
+    \coordinate (S) at (1,1,2);
+    
+    \fill[gray!20] (A) -- (B) -- (C) -- (D) -- cycle;
+    \fill[gray!30] (S) -- (A) -- (B) -- cycle;
+    \fill[gray!40] (S) -- (B) -- (C) -- cycle;
+    \fill[gray!25] (S) -- (C) -- (D) -- cycle;
+    
+    \draw (A) -- (B) -- (C) -- (D) -- cycle;
+    \draw (S) -- (A);
+    \draw (S) -- (B);
+    \draw (S) -- (C);
+    \draw[dashed] (S) -- (D); % hidden edge
+
+\end{scope}
+\end{tikzpicture}
+
+\subsection{Sphere \& Shades}
+
+Yess, TikZ coordinates system fully support distance units.
+
+\begin{tikzpicture}
+
+    \shade[ball color=red!20!white] (0,0) circle (2cm);
+
+    \shade[ball color=red!20!white] (8cm,0) circle (4cm);
+
+\end{tikzpicture}
+
+\begin{tikzpicture}
+
+    \shade[ball color=red!20,
+           opacity=0.85] (0,0) circle (2cm);
+
+    \draw[thin] (0,0) ellipse (2cm and 0.6cm);
+    \draw[thin] (0,0) ellipse (0.6cm and 2cm);
+
+\end{tikzpicture}
+
+\begin{tikzpicture}
+    \shade[inner color=white, 
+           outer color=red!20] (0,0) circle (2cm);
+
+\end{tikzpicture}
+
+\newpage
+
+Shading angle = 90
+
+\begin{tikzpicture}
+
+    \shade[shading=axis, 
+           left color=red, 
+           right color=blue, 
+           shading angle=90]
+    (0,0) rectangle (3,2);
+
+\end{tikzpicture}
+
+Shading angle = 40
+
+\begin{tikzpicture}
+
+    \shade[shading=axis, 
+           left color=red, 
+           right color=blue, 
+           shading angle=40]
+    (0,0) rectangle (3,2);
+
+\end{tikzpicture}
+
+Shading angle = 0
+
+\begin{tikzpicture}
+
+    \shade[shading=axis, 
+           left color=red, 
+           right color=blue, 
+           shading angle=0]
+    (0,0) rectangle (3,2);
+
+\end{tikzpicture}
+
+\subsection{Cylinder}
+
+
 
 \subsubsection{Camera angles}
 
@@ -1630,7 +1881,24 @@ Another example:
 \begin{tikzpicture}[rotate around x=45, rotate around z=30]
 \draw (0,0,0) -- (2,0,0) -- (2,2,0) -- (0,2,0) -- cycle;
 \end{tikzpicture}
+
 \subsection{Surfaces - PgfPlots}
+
+\begin{tikzpicture}
+\begin{axis}[
+    hide axis,
+]
+    \addplot3[
+        surf,
+        domain=0:180,
+        y domain=0:180,
+    ] 
+    ({cos(x)},
+     {sin(x)},
+     {cos(y)});
+\end{axis}
+\end{tikzpicture}
+
 
 \begin{tikzpicture}
 \begin{axis}
@@ -1640,7 +1908,170 @@ Another example:
 \end{axis}
 \end{tikzpicture}
 
-\section{For chemists}
+After rotation around X and Z, 50 degreees each
+
+% view{angle around z}{angle around x}
+
+\begin{tikzpicture}
+\begin{axis}[view={50}{50}]
+
+    \addplot3[surf] {x^2 + y^2};
+
+\end{axis}
+\end{tikzpicture}
+
+Now, X=-50
+
+\begin{tikzpicture}
+\begin{axis}[view={50}{-50}]
+
+    \addplot3[surf] {x^2 + y^2};
+
+\end{axis}
+\end{tikzpicture}
+
+\subsection{Good example i found on the PGFPlot creator - Christian FeurSanger}
+
+\begin{tikzpicture}
+\begin{axis}[
+    ybar stacked,
+	bar width=15pt,
+	nodes near coords,
+    enlargelimits=0.15,
+    legend style={at={(0.5,-0.20)},
+      anchor=north,legend columns=-1},
+    ylabel=participants,
+    symbolic x coords={tool1, tool2, tool3, tool4, 
+		               tool5, tool6, tool7},
+    xtick=data,
+    cycle list={
+        {fill={rgb,1:red,0.1;green,0.5;blue,0.1}},
+        {fill={rgb,1:red,0.4;green,0.1;blue,0.4}},
+        {fill={rgb,1:red,0.7;green,0.3;blue,0.2}},
+        {fill={rgb,1:red,0.9;green,0.7;blue,0.1}},
+    },
+    x tick label style={rotate=45,anchor=east}, % nice style ! we can in fact rotate ticks!
+    ]
+    \addplot+[ybar] plot coordinates {(tool1,2) (tool2,1) 
+      (tool3,2) (tool4,3) (tool5,0) (tool6,2) (tool7,0)};
+    \addplot+[ybar] plot coordinates {(tool1,0) (tool2,2) 
+      (tool3,0) (tool4,3) (tool5,1) (tool6,1) (tool7,0)};
+    \addplot+[ybar] plot coordinates {(tool1,6) (tool2,6)
+      (tool3,8) (tool4,2) (tool5,6) (tool6,5) (tool7,6)};
+    \addplot+[ybar] plot coordinates {(tool1,4) (tool2,2) 
+      (tool3,0) (tool4,2) (tool5,3) (tool6,2) (tool7,4)};
+    \legend{\strut never, \strut rarely, \strut sometimes, \strut often}
+\end{axis}
+\end{tikzpicture}
+
+\subsection{Scatterplots}
+
+\begin{tikzpicture}
+\begin{axis}[xlabel=$x$,
+             ylabel=$y$,
+             zlabel=$z$]
+
+    \addplot3[only marks,
+              scatter,
+              scatter src = explicit,
+              mark=*,
+              colormap name=inferno] coordinates {
+    (1,2,3) [0.6]
+    (2,1,4) [0.2]
+    (3,3,2) [0.9]
+    (4,2,5) [0.4]
+              };
+
+\end{axis}
+\end{tikzpicture}
+
+\subsection{Scatterplots + CSV}
+
+% we control explicitly the coor column by those options: "scatter src = explicit" and "meta=color/nameofthecolorcolumn"
+\begin{tikzpicture}
+\begin{axis}[xlabel=$x$,
+             ylabel=$y$,
+             zlabel=$z$]
+
+    \addplot3[only marks,
+              mark=*,
+              scatter,
+              scatter src = explicit
+    ] table[col sep=comma, 
+            y=y, 
+            x=x,
+            z=z,
+            meta=color] {scatterplot3D.csv};
+
+\end{axis}
+\end{tikzpicture}
+
+\subsection{ScatterPlot 3D + Lines}
+
+Good for representing the evolution of a positon inside a 3D space
+
+\begin{tikzpicture}
+\begin{axis}[xlabel=$x$,
+             ylabel=$y$,
+             zlabel=$z$]
+
+    \addplot3[only marks,
+              mark=*,
+              scatter,
+              scatter src = explicit,
+              smooth
+    ] table[col sep=comma, 
+            y=y, 
+            x=x,
+            z=z,
+            meta=color] {scatterplot3D2.csv};
+
+\end{axis}
+\end{tikzpicture}
+
+\subsection{MeshPlot}
+
+\begin{tikzpicture}
+\begin{axis}[grid=major,view={210}{30}]
+
+    \addplot3+[mesh,
+               scatter,
+               samples=10,domain=0:1] 
+		{5*x*sin(2*deg(x)) * y*(1-y)};
+
+\end{axis}
+\end{tikzpicture}
+
+\section{3D barplot}
+
+
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel=$x axis$, 
+    zlabel=$values$, 
+    ylabel=$y axis$,
+    symbolic x coords={A,B,C},
+    symbolic y coords={X,Y,Z},
+    xtick=data,
+    ytick=data,
+    enlargelimits=true
+]
+
+    \addplot3[
+        ybar,
+        fill=blue!50,
+    ] 
+    table[
+        col sep=comma,
+        x=xlabel,
+        y=zlabel,
+        z=value 
+    ] {barplot3D.csv};
+    
+\end{axis}
+\end{tikzpicture}
+
+\section{For chemists, the real one the Organic chemistry}
 
 \subsection{Simple links}
 
@@ -1705,6 +2136,91 @@ Another example:
 \chemfig{O^{-}} 
 \chemfig{O^{+}} 
 
+\subsection{For chemist, again, the boring one}
+
+For the one that had the chance to never do "formulation" chemistry, yess that is the french name for the field of  chemistry where we have to work with ternary diagramm.
+
+It is super simple to read it.
+
+Basicaly a ternary diagramm will just study the composition of an element and represent its properties on the same graph.
+
+Here we can show 3 main "matériaux" that constitutes an element in percentage, so the total sum at each point in the diagramm must be 100\%.
+
+Put it at any point. How do you get the composition of that point ?
+
+Super simple, you se the are 3 lines directions.
+
+One for one matériaux.
+
+To assiciate a line direction with its matériaux, it is just the line directon that comes from its 0 value.
+
+Here the horizontal ones for the Chromium.
+
+The direction line that is approx at 45 degrees for the Nickel.
+
+The one that are at approx 315 degrees for the Iron.
+
+\begin{tikzpicture}
+\begin{ternaryaxis}[
+	title=Want--be--Stainless Steel,
+	xlabel=Weight Percent Chromium,
+	ylabel=Weight Percent Iron,
+	zlabel=Weight Percent Nickel,
+	label style=sloped,
+	area style,
+  ]
+	\addplot3 table {
+	1 0 0
+	0.5 0.4 0.1
+	0.45 0.52 0.03
+	0.36 0.6 0.04
+	0.1 0.9 0
+	};
+	\addlegendentry{Cr}
+
+	\addplot3 table {
+	1 0 0
+	0.5 0.4 0.1
+	0.28 0.35 0.37
+	0.4 0 0.6
+	};
+	\addlegendentry{Cr+$\gamma$FeNi}
+
+	\addplot3 table {
+	0.4 0 0.6
+	0.28 0.35 0.37
+	0.25 0.6 0.15
+	0.1 0.9 0
+	0 1 0
+	0 0 1
+	};
+	\addlegendentry{$\gamma$FeNi}
+
+	\addplot3 table {
+	0.1 0.9 0
+	0.36 0.6 0.04
+	0.25 0.6 0.15
+	};
+	\addlegendentry{Cr+$\gamma$FeNi}
+
+	\addplot3 table {
+	0.5 0.4 0.1
+	0.45 0.52 0.03
+	0.36 0.6 0.04
+	0.25 0.6 0.15
+	0.28 0.35 0.37
+	};
+	\addlegendentry{$\sigma$+$\gamma$FeNi}
+
+	\node[inner sep=0.5pt,
+          circle,
+          draw,
+          fill=white,
+	      pin=-15:\footnotesize Stainless Steel
+    ] at (axis cs:0.18,0.74,0.08) {};
+	
+\end{ternaryaxis}
+\end{tikzpicture}
 
 \end{document}
 
