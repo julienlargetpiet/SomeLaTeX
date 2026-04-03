@@ -411,7 +411,6 @@ int main() {
 \end{minted}
 \end{tcolorbox}
 
-
 \section{Lists}
 
 \begin{itemize}
@@ -482,6 +481,8 @@ Numbered Lists:
 \hline
 \end{tabular}
 
+\rowcolors{0}{}{} % RESET
+
 \subsection{Booktabs}
 
 \rowcolors{1}{white}{white} %reset
@@ -503,6 +504,8 @@ E & F \\
 \bottomrule
 \end{tabular}
 
+\rowcolors{0}{}{}
+
 \section{Images}
 
 %\begin{figure}[H]
@@ -512,7 +515,7 @@ E & F \\
 %\end{figure}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\textwidth]{cc2.png}
+    \includegraphics[width=0.5\textwidth]{lynxcute.jpg}
     \caption{Example Image}
 \end{figure}
 \FloatBarrier
@@ -809,7 +812,7 @@ Base Tree, no TikZ extra lib needed, workd with pdflatex
 \end{tikzpicture}
 
 
-\subsubsection{L'arbre prend forme}
+\subsubsection{L\textquotesingle arbre prend forme}
 
 En fait j'ai pas réusii, il vaut mieux générer la structure statique avec python, R ou autre puis le mettre dans un include/input.
 
@@ -873,6 +876,115 @@ En fait j'ai pas réusii, il vaut mieux générer la structure statique avec pyt
 }
 
 \isin{L}{L,R,TT}{OUI}{NON}
+
+\section{Maths}
+
+\subsection{Inline maths}
+
+$f(x) = x^2$
+
+\subsection{Center math}
+
+\[
+f(x) = x^2
+\]
+
+\subsection{Indices \& exponents}
+
+\[
+x^2,\quad x_1,\quad x^{10},\quad x_{i,j}
+\]
+
+\subsection{Fractions}
+
+\[
+    \frac{a}{b}
+\]
+
+\subsection{Integral}
+
+\[
+    \int_0^1 x^2 \, dx
+\]
+
+\[
+    \int_{0}^{\frac{a}{b}} x^2 \, dx
+\]
+
+\subsection{Sum}
+
+\[
+    \sum_{i=1}^{n} i^2
+\]
+
+\subsection{Lim}
+
+\[
+    \lim_{x \to \infty} \frac{1}{x} = 0
+\]
+
+\subsection{Parenthesis}
+
+\[
+    \left( \frac{1}{2} \right)
+\]
+
+\[
+    \left[ \frac{1}{2} \right]
+\]
+
+\subsection{Matrices}
+
+\[
+\begin{matrix}
+    1 & 2 \\
+    3 & 4
+\end{matrix}
+\]
+
+\[
+\begin{pmatrix}
+    1 & 2 \\
+    3 & 4
+\end{pmatrix}
+\]
+
+\[
+\begin{bmatrix}
+    1 & 2 \\
+    3 & 4
+\end{bmatrix}
+\]
+
+\[
+\left(
+\begin{matrix}
+    1 & 2 \\
+    3 & 4
+\end{matrix}
+\right)
+\]
+
+\[
+\left[
+\begin{matrix}
+    1 & 2 \\
+    3 & 4
+\end{matrix}
+\right]
+\]
+ 
+\[
+\begin{vmatrix}
+    1 & 2 \\
+    3 & 4
+\end{vmatrix}
+\]
+
+\begin{align}
+f(x) &= x^2 + 1 \\
+     &= (x+1)(x-1) + 2
+\end{align}
 
 \section{Boxes}
 
@@ -949,7 +1061,7 @@ En fait j'ai pas réusii, il vaut mieux générer la structure statique avec pyt
 \begin{minipage}{0.48\textwidth}
 
     \centering
-    \includegraphics[width=0.35\textwidth]{cc2.png}
+    \includegraphics[width=0.35\textwidth]{lynxcute.jpg}
 
     %\vspace{1cm}
     \bigskip
@@ -1284,7 +1396,8 @@ En fait j'ai pas réusii, il vaut mieux générer la structure statique avec pyt
 \begin{axis}[
     ybar,
     symbolic x coords={A,B,C},
-    xtick=data
+    xtick=data,
+    enlargelimits=0.15
 ]
 
     \addplot[color=blue!50,
@@ -1726,6 +1839,33 @@ Basic, default projections
 \end{scope}
 \end{tikzpicture}
 
+Trap rotation -> respect nothing
+
+\begin{tikzpicture}
+\begin{scope}[rotate around x = 45, rotate around y = 45, rotate around z = 45]
+
+    \coordinate (A) at (0,0,0);
+    \coordinate (B) at (2,0,0);
+    \coordinate (C) at (2,2,0);
+    \coordinate (D) at (0,2,0);
+    
+    \coordinate (S) at (1,1,2);
+    
+    \fill[gray!20] (A) -- (B) -- (C) -- (D) -- cycle;
+    \fill[gray!30] (S) -- (A) -- (B) -- cycle;
+    \fill[gray!40] (S) -- (B) -- (C) -- cycle;
+    \fill[gray!25] (S) -- (C) -- (D) -- cycle;
+    
+    \draw (A) -- (B) -- (C) -- (D) -- cycle;
+    \draw (S) -- (A);
+    \draw (S) -- (B);
+    \draw (S) -- (C);
+    \draw[dashed] (S) -- (D); % hidden edge
+
+\end{scope}
+\end{tikzpicture}
+
+
 Tweaked projection
 
 \begin{tikzpicture}
@@ -1820,9 +1960,364 @@ Shading angle = 0
 
 \end{tikzpicture}
 
+\subsection{Cone}
+
+\subsubsection{3D projection onto 2D plan - not ideal in fact}
+
+Indeed, we get a unnecessary cogitive load for nothing, even worse, because here the projection, on Y axis, is 1 unit of Y = 0.5 right + 0.5 up.
+
+So unpredictability when it comes to the shift side-effect.
+
+\begin{tikzpicture} 
+\begin{scope}[x={(1cm,0cm)}, 
+              y={(0.5cm,0.5cm)}, 
+              z={(0cm,1cm)}] 
+    
+    \def\rx{1.5} 
+
+    \pgfmathsetmacro{\startangle}{180} % min = 180
+    \pgfmathsetmacro{\endangle}{300} % max = 360
+
+    \pgfmathsetmacro{\baselength}{(cos(\startangle - 180) + cos(360 - \endangle)) * \rx}
+
+    \pgfmathsetmacro{\xapex}{\baselength / 2} 
+    \pgfmathsetmacro{\yapex}{\baselength / (2 * \rx)} 
+
+    \coordinate (S) at (\xapex, \yapex, 3);
+
+    \shade[ shading angle=-90, 
+            left color= red!95, 
+            right color=red!60 
+          ] (0,0,0) arc[start angle = \startangle, 
+                        end angle = 360, 
+                        x radius = \rx cm, 
+                        y radius = \rx cm] 
+                    -- (S) 
+                    -- cycle; 
+
+    \shade[ shading angle=-90, 
+            left color=gray!95, 
+            right color=gray!60 
+          ] (0,0,0) arc[start angle = \startangle, 
+                        end angle = \endangle, 
+                        x radius = \rx cm, 
+                        y radius = \rx cm] 
+                    -- (S) 
+                    -- cycle; 
+
+\end{scope} 
+\end{tikzpicture}
+
+\begin{tikzpicture} 
+\begin{scope}[x={(1cm,0cm)}, 
+              y={(0.5cm,0.5cm)}, 
+              z={(0cm,1cm)}] 
+    
+    \def\rx{1.5} 
+
+    \pgfmathsetmacro{\startangle}{180} % min = 180
+    \pgfmathsetmacro{\endangle}{350} % max = 360
+
+    \pgfmathsetmacro{\baselength}{(cos(\startangle - 180) + cos(360 - \endangle)) * \rx}
+
+    \pgfmathsetmacro{\xapex}{\baselength / 2} 
+    \pgfmathsetmacro{\yapex}{\baselength / (2 * \rx)} 
+
+    \coordinate (S) at (\xapex, \yapex, 3);
+
+    \shade[ shading angle=-90, 
+            left color= red!95, 
+            right color=red!60 
+          ] (0,0,0) arc[start angle = \startangle, 
+                        end angle = 360, 
+                        x radius = \rx cm, 
+                        y radius = \rx cm] 
+                    -- (S) 
+                    -- cycle; 
+
+    \shade[ shading angle=-90, 
+            left color=gray!95, 
+            right color=gray!60 
+          ] (0,0,0) arc[start angle = \startangle, 
+                        end angle = \endangle, 
+                        x radius = \rx cm, 
+                        y radius = \rx cm] 
+                    -- (S) 
+                    -- cycle; 
+
+\end{scope} 
+\end{tikzpicture}
+
+\subsubsection{2D faking 3D}
+
+\begin{tikzpicture}
+
+    \def\rx{2}      
+    \def\ry{0.6}    
+    \def\h{3}   
+
+    \coordinate (S) at (0,\h);
+    \coordinate (O) at (0,0);
+
+    \shade[
+        shading angle=0,
+        left color=gray!90,
+        right color=gray!50
+    ]
+    (-\rx,0) arc[start angle = 180,
+                 end angle = 360,
+                 x radius = \rx cm,
+                 y radius = \ry cm]
+    -- (S)
+    -- cycle;
+
+    \draw (-\rx,0) arc(180:360:\rx cm and \ry cm);
+
+    \draw[dashed] (\rx,0) arc(0:180:\rx cm and \ry cm);
+
+    % edges
+    \draw (S) -- (-\rx,0);
+    \draw (S) -- (\rx,0);
+
+\end{tikzpicture}
+
+\begin{tikzpicture}
+
+    \def\rx{2}      
+    \def\ry{0.6}    
+    \def\h{3}   
+
+    \coordinate (S) at (0,\h);
+    \coordinate (O) at (0,0);
+
+    \shade[
+        shading angle=0,
+        left color=gray!90,
+        right color=gray!50
+    ]
+    (-\rx,0) arc[start angle = 180,
+                 end angle = 270,
+                 x radius = \rx cm,
+                 y radius = \ry cm]
+    -- (S)
+    -- cycle;
+
+    \shade[
+        shading angle=0,
+        left color= red!90,
+        right color=red!50
+    ]
+    (\rx,0) arc[start angle = 0,
+                 end angle = -90,
+                 x radius = \rx cm,
+                 y radius = \ry cm]
+    -- (S)
+    -- cycle;
+
+    \draw (-\rx,0) arc(180:360:\rx cm and \ry cm);
+
+    \draw[dashed] (\rx,0) arc(0:180:\rx cm and \ry cm);
+
+    % edges
+    \draw (S) -- (-\rx,0);
+    \draw (S) -- (\rx,0);
+
+\end{tikzpicture}
+
+Base rotation (45 degrees)
+
+\begin{tikzpicture}[rotate=45]
+
+    \def\rx{2}      
+    \def\ry{0.6}    
+    \def\h{3}   
+
+    \coordinate (S) at (0,\h);
+    \coordinate (O) at (0,0);
+
+    \shade[
+        shading angle=0,
+        left color=gray!90,
+        right color=gray!50
+    ]
+    (-\rx,0) arc[start angle = 180,
+                 end angle = 270,
+                 x radius = \rx cm,
+                 y radius = \ry cm]
+    -- (S)
+    -- cycle;
+
+    \shade[
+        shading angle=0,
+        left color= red!90,
+        right color=red!50
+    ]
+    (\rx,0) arc[start angle = 0,
+                 end angle = -90,
+                 x radius = \rx cm,
+                 y radius = \ry cm]
+    -- (S)
+    -- cycle;
+
+    \draw (-\rx,0) arc(180:360:\rx cm and \ry cm);
+
+    \draw[dashed] (\rx,0) arc(0:180:\rx cm and \ry cm);
+
+    % edges
+    \draw (S) -- (-\rx,0);
+    \draw (S) -- (\rx,0);
+
+\end{tikzpicture}
+
+Rotate around apex (45 degrees)
+
+\begin{tikzpicture}[rotate around={45:(S)}]
+
+    \def\rx{2}      
+    \def\ry{0.6}    
+    \def\h{3}   
+
+    \coordinate (S) at (0,\h);
+    \coordinate (O) at (0,0);
+
+    \shade[
+        shading angle=0,
+        left color=gray!90,
+        right color=gray!50
+    ]
+    (-\rx,0) arc[start angle = 180,
+                 end angle = 270,
+                 x radius = \rx cm,
+                 y radius = \ry cm]
+    -- (S)
+    -- cycle;
+
+    \shade[
+        shading angle=0,
+        left color= red!90,
+        right color=red!50
+    ]
+    (\rx,0) arc[start angle = 0,
+                 end angle = -90,
+                 x radius = \rx cm,
+                 y radius = \ry cm]
+    -- (S)
+    -- cycle;
+
+    \draw (-\rx,0) arc(180:360:\rx cm and \ry cm);
+
+    \draw[dashed] (\rx,0) arc(0:180:\rx cm and \ry cm);
+
+    % edges
+    \draw (S) -- (-\rx,0);
+    \draw (S) -- (\rx,0);
+
+\end{tikzpicture}
+
+Fake 3D rotation
+
+\begin{tikzpicture}
+
+    \def\rx{2}      
+    \def\ry{0.7}    
+    \def\h{2}   
+
+    \coordinate (S) at (0,\h);
+    \coordinate (O) at (0,0);
+
+    \fill[
+        color=white
+    ]
+    (-\rx,0) arc[start angle = 180,
+                 end angle = 360,
+                 x radius = \rx cm,
+                 y radius = \ry cm]
+    -- (S)
+    -- cycle;
+
+    \draw[thin] (-\rx,0) arc(180:360:\rx cm and \ry cm);
+
+    \draw[thick] (\rx,0) arc(0:180:\rx cm and \ry cm);
+
+    % edges
+    \draw (S) -- (-\rx,0);
+    \draw (S) -- (\rx,0);
+
+    \draw[thick] (S) -- (0,\ry);
+    \draw[thick, dashed] (0, \ry) -- (0,-\ry);
+
+\end{tikzpicture}
+
+
 \subsection{Cylinder}
 
+\begin{tikzpicture}
+\begin{scope}[x={(1cm,0cm)}, 
+              y={(0.5cm,0.5cm)}, 
+              z={(0cm,1cm)}]
 
+    \coordinate (O) at (0,0,0);   
+    \coordinate (T) at (0,0,3);
+
+    \def\rx{1.5}
+    \def\ry{0.5}
+
+    \draw (O) ellipse (\rx cm and \ry cm);
+    \draw (T) ellipse (\rx cm and \ry cm);
+
+    \draw (-\rx, 0, 0) -- (-\rx, 0, 3);
+    \draw (\rx, 0, 0) -- (\rx, 0, 3);
+
+\end{scope}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{scope}[x={(1cm,0cm)}, 
+              y={(0.5cm,0.5cm)}, 
+              z={(0cm,1cm)}]
+
+    \coordinate (O) at (0,0,0);   
+    \coordinate (T) at (6,1,1);
+
+    \def\rx{0.65}
+    \def\ry{1}
+
+    \shade[shading angle=-90,
+           left color=gray!90,
+           right color=gray!80,
+           top color=gray!80,
+           bottom color=gray!90,
+           draw=none
+           ] 
+                     (0, 0, \ry)
+                     arc[start angle = 90,
+                          end angle = 270,
+                          x radius = \rx cm,
+                          y radius = \ry cm]
+                      -- (6, 1, 1 - \ry ) 
+                      arc[start angle = -90,
+                          end angle = 90,
+                          x radius = \rx cm,
+                          y radius = \ry cm]
+                      -- (0, 0, \ry);
+
+    \draw (6, 1, \ry + 1)
+          arc[start angle=90,
+              end angle=-90,
+              x radius=\rx cm,
+              y radius=\ry cm]
+          -- (6, 1, 1 - \ry);
+
+    \draw[fill=black,
+          opacity=0.5] (O) ellipse (\rx cm and \ry cm);
+
+    \draw (0, 0, \ry) 
+           -- (6, 1, \ry + 1);
+    \draw (6, 1, 1 - \ry) 
+          -- (0, 0, -\ry);
+
+\end{scope}
+\end{tikzpicture}
 
 \subsubsection{Camera angles}
 
@@ -2054,7 +2549,7 @@ Good for representing the evolution of a positon inside a 3D space
     symbolic y coords={X,Y,Z},
     xtick=data,
     ytick=data,
-    enlargelimits=true
+    enlargelimits=0.15
 ]
 
     \addplot3[
