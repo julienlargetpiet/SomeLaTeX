@@ -1,3 +1,4 @@
 # SomeLaTeX
 
-lualatex as the engine
+lualatex or pdflatex as the engine, see article:
+
