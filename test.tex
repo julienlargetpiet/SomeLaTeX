@@ -24,7 +24,7 @@
 \usepackage{microtype}   % better micro spacing (letters/words)
 \usepackage{fancyhdr}    % page headers
 \usepackage{titlesec}    % used for sections style here, \titleformat
-\usepackage[table]{xcolor}      % coors text with \textcolor - [table] means extra load of function like \rowcolor...
+\usepackage[table]{xcolor}      % colors text with \textcolor - [table] means extra load of function like \rowcolor...
 \usepackage{tcolorbox}   % used to highlight text, literaly a colored box
 \usepackage{listings}    % used for code-blocks
 \usepackage{minted}      % used for code-blocks (alterntive) - more powerfull but rely on python - require `pdflatex -shell-escape file.tex`
@@ -188,6 +188,9 @@
 
 \onehalfspacing
 \maketitle
+
+\listoffigures
+
 { % here we just do a scoping to define temporary hyperefsetup just used by \tableofcontents
   \hypersetup{linkcolor = black} 
   \tableofcontents
