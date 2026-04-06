@@ -43,8 +43,9 @@
 \usetikzlibrary{graphs}
 \usetikzlibrary{graphdrawing}
 
-\usegdlibrary{trees} % from graphdrawning
+\usegdlibrary{trees} % from graphdrawing
 \usegdlibrary{force}
+\usegdlibrary{layered}
 
 \usepgfplotslibrary{ternary} % ternary diagramm
 
@@ -156,8 +157,8 @@
   }
 }
 
-\title{Doc}
-\author{J LP}
+\title{DocYess}
+\author{J LP Yess}
 \date{\today}
 
 %%%% VARIABLES REGISTRATION %%%
@@ -176,7 +177,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\includeonly{ici}
+\includeonly{ici,ici2}
 
 % Declare custom maths operators - symbols
 \DeclareMathOperator{\Var}{VarCustom}
@@ -224,6 +225,21 @@
 
 \lipsum
 
+\section{citations \& internal links}
+
+\newcount\citecounter
+\citecounter=0
+
+\newcommand{\mycite}[1]{%
+  \advance\citecounter by 1
+  \edef\temp{\the\citecounter}%
+  \hyperlink{#1}{[\temp]}%
+}
+
+\mycite{cit1}
+
+\mycite{cit2}
+
 \section{Basics - sections, subsections, paragraphs...}
 \subsection{Normal}
 
@@ -257,6 +273,12 @@ A paragraph yeah a paragraph haha, lol i dk what to write here so i rpetend just
 \underline{Hello underlined} 
 
 \underline{\textbf{\textit{Hello all}}} 
+
+\section{References}
+
+\ref{sec:REF1}
+
+\pageref{sec:REF1}
 
 \section{Font Sizes}
 
@@ -293,6 +315,8 @@ Hell02\footnote{this is a second footnote}
 \_
 
 \section{Links}
+\label{sec:REF1}
+
 
 \href{\mybloglink}{My-blog}
 
@@ -433,6 +457,23 @@ Numbered Lists:
 \hline
 \end{tabular}
 
+\begin{tabular}{c|c|}
+\hline
+    A & B \\
+\hline
+    C & D \\
+\hline
+\end{tabular}
+
+\begin{tabular}{c|c}
+\hline
+    A & B \\
+\hline
+    C & D \\
+\hline
+\end{tabular}
+
+
 \subsection{Cell color}
 
 \begin{tabular}{|c|c|}
@@ -481,26 +522,60 @@ Numbered Lists:
 
 \rowcolors{0}{}{} % RESET
 
+\rowcolors{2}{blue!20}{red!20}
+
+\begin{tabular}{|c|c|}
+\hline
+    A & B \\
+\hline
+    C & D \\
+\hline
+    E & F \\
+\hline
+    G & H \\
+\hline
+\end{tabular}
+
+\rowcolors{0}{}{} % RESET
+
+
 \subsection{Booktabs}
 
 \rowcolors{1}{white}{white} %reset
 
-\begin{tabular}{cc}
+\begin{tabular}{|cc|}
 \toprule
 A & B \\
 \midrule
 C & D \\
+\hline
 E & F \\
+\hline
 C & D \\
+\hline
 E & F \\
+\hline
 C & D \\
+\hline
 E & F \\
+\hline
 C & D \\
+\hline
 E & F \\
+\hline
 C & D \\
+\hline
 E & F \\
 \bottomrule
 \end{tabular}
+
+dfd
+
+\hrule
+
+sfdf
+
+\hrule
 
 \rowcolors{0}{}{}
 
@@ -517,6 +592,13 @@ E & F \\
     \caption{Example Image}
 \end{figure}
 \FloatBarrier
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[height=4cm, 
+                     width=4cm]{lynxcute.jpg}
+    \caption{Example Image2}
+\end{figure}
 
 \section{Expansions}
 
@@ -782,6 +864,33 @@ With LuaLaTeX
     \graph[spring layout]{
         A -- B -- C -- D -- A;
         A -- C;
+    };
+
+\end{tikzpicture}
+
+\begin{tikzpicture}
+
+    \graph[tree layout]{
+        A -- B -- C -- D -- A;
+        A -- C;
+    };
+
+\end{tikzpicture}
+
+\begin{tikzpicture}
+
+    \graph[spring layout]{
+        A <- B -- C -- D -- A;
+        A -> C;
+    };
+
+\end{tikzpicture}
+
+\begin{tikzpicture}
+
+    \graph[spring layout]{
+        A <-> B -- C -- D -- A;
+        A -> C;
     };
 
 \end{tikzpicture}
@@ -1164,7 +1273,7 @@ x^2 \quad x
 
     \addplot[name path = f,
              color=blue,
-             thick]{x^2};
+             line width=0.8pt]{x^2};
 
     \addplot[name path = g,
              color=red,
@@ -1224,6 +1333,46 @@ x^2 \quad x
 
 \end{axis}
 \end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[xlabel=$x$,
+             ylabel=$y$,
+             domain=-2:2,
+             grid=both,
+             axis lines=right,
+             axis line style={<-},
+             grid style=gray!20,
+             legend pos=north west,
+             width=10cm,
+             height=6cm]
+
+% axis ine options:
+% left
+% right
+% middle
+% center
+% box
+% none
+
+    \addplot[name path = f,
+             color=blue,
+             thick,
+             dotted]{x^2 - 2};
+
+    \addplot[dashed]{1 + x^2};
+    \addplot[dotted]{2 + x^2};
+    \addplot[dashdotted]{x^2};
+
+% Custom dash
+
+    \addplot[
+        dash pattern=on 5pt off 2pt,
+        color=blue
+    ]{x^1};
+
+\end{axis}
+\end{tikzpicture}
+
 
 \begin{tikzpicture}
 \begin{axis}[xlabel=$x$,
@@ -1297,6 +1446,37 @@ x^2 \quad x
 \end{axis}
 \end{tikzpicture}
 
+\begin{tikzpicture}
+\begin{axis}[xlabel=$x$,
+             ylabel=$y$,
+             domain=-2:2,
+             grid=both,
+             legend pos=north west,
+             width=10cm,
+             height=6cm]
+
+    \addplot[only marks,
+             mark=diamond*,
+             color=purple] coordinates {
+        (0, 0)
+        (1, 1)
+        (2, 4)
+    };
+
+    \addplot[mark=o,
+             color=green!40!black] coordinates {
+        (-2, -3)
+        (1, 0.75)
+        (1.5, 5)
+        (2, 3)
+    };
+
+    \node at (axis cs:1,1.8) {Hello};
+
+\end{axis}
+\end{tikzpicture}
+
+
 \subsubsection{Scatterplot - CSV}
 
 \begin{tikzpicture}
@@ -1356,10 +1536,62 @@ x^2 \quad x
 \end{axis}
 \end{tikzpicture}
 
+\subsection{Mask filter}
+
+\begin{tikzpicture}
+\begin{axis}[xlabel=$x$,
+             ylabel=$y$,
+             domain=-2:2,
+             grid=both,
+             legend pos=north west,
+             width=10cm,
+             height=6cm]
+
+    \addplot[mark=*,
+             only marks,
+             color=red!40] table[col sep=comma,
+                                    y filter/.code = {
+                                      \ifnum\thisrow{y}>2
+                                      \def\pgfmathresult{nan}
+                                      \fi
+                                    },
+                                    x=x,
+                                    y expr=\thisrow{y} * 2 + 2 * \thisrow{y2}] {scatterplot.csv};
+
+
+\end{axis}
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+\begin{axis}[xlabel=$x$,
+             ylabel=$y$,
+             domain=-2:2,
+             grid=both,
+             legend pos=north west,
+             width=10cm,
+             height=6cm]
+
+    \addplot[
+        mark=*,
+        only marks,
+        color=blue!40,
+        y filter/.expression={y > 10 ? nan : y},
+        unbounded coords=discard
+    ] table[
+        col sep=comma,
+        x=x,
+        y expr=\thisrow{y} * 2 + 2 * \thisrow{y2}
+    ] {scatterplot.csv};
+
+\end{axis}
+\end{tikzpicture}
+
 \subsubsection{Scatterplot - CSV - Store in memory + Vertical concat}
  
 \begin{tikzpicture}
-\begin{axis}[xlabel=$x$,
+\begin{axis}[title={Title Yess, a title},
+             xlabel=$x$,
              ylabel=$y$,
              domain=-2:8,
              grid=both,
@@ -1388,6 +1620,42 @@ x^2 \quad x
 
 \end{axis}
 \end{tikzpicture}
+ 
+\begin{tikzpicture}
+\begin{axis}[title={Title Yess, a title},
+             xlabel=$x$,
+             ylabel=$y$,
+             domain=-2:8,
+             grid=both,
+             legend pos=north west,
+             width=10cm,
+             height=6cm]
+
+    % global tables
+    \pgfplotstableread[col sep=comma]{scatterplot.csv}\mytable
+
+    \pgfplotstableread[col sep=comma]{scatterplot2.csv}\mytableB
+
+    %concat mytableB to mytable
+    \pgfplotstablevertcat{\mytable}{\mytableB}
+
+    \pgfplotstablecreatecol[
+        create col/expr={
+            \thisrow{y} < 2 ? (\thisrow{y}^2 - \thisrow{y2}) : nan
+        }
+    ]{y3}{\mytable}
+
+    \addplot[mark=*,
+             only marks,
+             color=blue!45,
+             unbounded coords=discard
+             ] table[col sep=comma,
+                     x=x,
+                     y expr=\thisrow{y3} * 2\thisrow{y2}] {\mytable};
+
+
+\end{axis}
+\end{tikzpicture}
 
 \subsubsection{Intersections}
 
@@ -1407,6 +1675,27 @@ x^2 \quad x
     \node at (intersection-2) [above] {$x=1$};
 
 \end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+
+    % Define square
+    \draw[name path=mysquare] 
+        (-1,-1) rectangle (1,1);
+
+    % Define circle
+    \draw[name path=mycircle] 
+        (0,0) circle (1.15);
+
+    % Compute intersections
+    \path[name intersections={of=mysquare and mycircle}];
+
+    % Draw intersection points
+    \foreach \i in {1,2,3,4,5,6,7,8} {
+        \fill (intersection-\i) circle (2pt);
+        \node at (intersection-\i) [above] {\i};
+    }
+
 \end{tikzpicture}
 
 \subsection{Barplot}
@@ -2787,6 +3076,20 @@ The one that are at approx 315 degrees for the Iron.
 	
 \end{ternaryaxis}
 \end{tikzpicture}
+
+\newpage
+
+\hypertarget{cit1}{Citatttttttion1}
+
+\hypertarget{cit2}{Citatttttttion2}
+
+
+\newdimen\customdim
+\customdim=2cm
+
+\setlength{\parskip}{\dimexpr 2\customdim*2 / 3 + 1cm\relax}
+
+\setlength{\parskip}{\dimexpr 2\customdim\relax}
 
 \end{document}
 
