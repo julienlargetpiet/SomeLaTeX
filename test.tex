@@ -34,6 +34,7 @@
 \usepackage{chemfig}     % for drawing molecules
 \usepackage{pgfplotstable} %read csv 
 \usepackage{booktabs} % nicer tabs
+\usepackage{soul}
 
 % for \path[name intersections={of=f and g}];
 \usetikzlibrary{intersections} 
@@ -233,7 +234,7 @@
 \newcommand{\mycite}[1]{%
   \advance\citecounter by 1
   \edef\temp{\the\citecounter}%
-  \hyperlink{#1}{[\temp]}%
+  \hyperlink{#1}{[\temp]}
 }
 
 \mycite{cit1}
@@ -244,6 +245,73 @@
 \subsection{Normal}
 
 Hello Normal
+
+This is a sentence.
+
+This is another sentence.
+
+This is a sentenceinside a par.
+This is a sentence inside a par.
+
+This is a sentenceinside a par too. This is a sentence inside a par too.
+
+
+This is a sentenceinside a par.
+This is a sentence inside a par.
+
+
+
+
+
+
+This is a sentenceinside a par too. This is a sentence inside a par too.
+
+This is a sentenceinside a par too.\\ This is a sentence inside a par too.
+
+This is a sentenceinside a par too. \\
+
+This is a sentence inside a par too.
+
+
+This is a sentenceinside a par too. \\
+
+
+
+This is a sentence inside a par too.
+
+SSDF
+
+This is a sentenceinside a par too. 
+\\
+This is a sentence inside a par too.
+
+SSDFDF
+
+This is a sentenceinside a par too. \\ \\ \\
+This is a sentence inside a par too.
+
+Separation
+
+This is a sentenceinside a par too. \\ \\ \\ \\
+This is a sentence inside a par too.
+
+Ok
+\vspace{1cm}
+Ok
+
+Ok \vspace{1cm} Ok
+
+
+Ok
+
+\vspace{1cm}
+
+Ok
+
+
+Ok \hspace{1cm} Ok
+
+Ok
 
 \subsubsection{Normal}
 
@@ -298,6 +366,102 @@ A paragraph yeah a paragraph haha, lol i dk what to write here so i rpetend just
 
 {\Huge Huge}
 
+Example without scoping
+
+\tiny tiny
+
+\normalsize
+
+Mee
+
+\footnotesize footnotesize
+
+\normalsize
+
+Mee
+
+\small small
+
+\normalsize
+
+Mee
+
+\normalsize normalsize
+
+Mee
+
+\large large
+
+\normalsize
+
+Mee
+
+
+\Large Large
+
+\normalsize
+
+Mee
+
+
+\huge huge
+
+\normalsize
+
+Mee
+
+\Huge Huge
+
+\normalsize
+
+Mee
+
+ 
+\vspace{1cm}
+\hrule
+
+
+\tiny tiny
+
+Mee
+
+\footnotesize footnotesize
+
+Mee
+
+\small small
+
+Mee
+
+\normalsize normalsize
+
+Mee
+
+\large large
+
+Mee
+
+\Large Large
+
+Mee
+
+\huge huge
+
+Mee
+
+\Huge Huge
+
+Mee
+
+\normalsize
+
+Custom font size:
+
+
+{\fontsize{14pt}{18pt}\selectfont
+This is a sentence with my custom font !!!
+}
+
 \section{Footnotes}
 
 Hell0\footnote{this is a first footnote}
@@ -342,6 +506,12 @@ Hell02\footnote{this is a second footnote}
 
 \section{Highligts}
 
+Hoo! \hl{highlighted} !!
+
+\sethlcolor{cyan}
+
+Hoo! \hl{highlighted} !!
+
 Default coloredbox
 
 \begin{tcolorbox}
@@ -379,6 +549,20 @@ Customoized 3 tcolorbox
 ]
 Clean modern box
 \end{tcolorbox}
+ 
+\begin{tcolorbox}[
+    colback=gray!10,
+    colframe=gray!50,
+    coltitle=blue,
+    colbacktitle=orange!5,
+    arc=6pt,
+    boxrule=2.5pt,
+    title=Hell Yeah Title,
+    halign title = center
+]
+Clean modern box2
+\end{tcolorbox}
+
 
 \section{Code-Block}
 
@@ -988,7 +1172,7 @@ En fait j'ai pas réusii, il vaut mieux générer la structure statique avec pyt
 
 \subsection{Inline maths}
 
-$f(x) = x^2$
+here some inlined maths $f(x) = x^2$
 
 \subsection{Center math}
 
@@ -1092,6 +1276,15 @@ x^2,\quad x_1,\quad x^{10},\quad x_{i,j}
 \end{vmatrix}
 \]
 
+\[
+\left|
+\begin{matrix}
+    1 & 2 \\
+    3 & 4
+\end{matrix}
+\right|
+\]
+
 \subsection{Eqations / aligned}
 
 \begin{align}
@@ -1160,6 +1353,8 @@ x^2 \quad x
 \boxed{E = mc^2}
 \]
 
+\boxed{BOOOOXE}
+
 \subsection{Custom maths operators - Symbols}
  
 \[
@@ -1171,6 +1366,21 @@ x^2 \quad x
 \fbox{\makebox[5cm][l]{Hello}}
 \fbox{\makebox[5cm][c]{Hello}}
 \fbox{\makebox[5cm][r]{Hello}}
+
+\makebox[5cm][l]{Hello}
+\makebox[5cm][c]{Hello}
+\makebox[5cm][r]{Hello}
+
+\fbox{\makebox[8cm][l]{Hello}}
+\fbox{\makebox[8cm][c]{Hello}}
+\fbox{\makebox[8cm][r]{Hello}}
+
+\fbox{\makebox[5cm][l]{Hello}}
+
+\fbox{\makebox[5cm][c]{Hello}}
+
+\fbox{\makebox[5cm][r]{Hello}}
+
 
 \newpage
 
@@ -1231,7 +1441,7 @@ x^2 \quad x
 % Each block should take 48% of the page width
 % figure and table can not go inside minipage
 
-\noindent
+%\noindent
 \begin{minipage}{0.48\textwidth}
 
 \lipsum[1]
@@ -1716,6 +1926,59 @@ x^2 \quad x
 \end{axis}
 \end{tikzpicture}
 
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    symbolic x coords={A,B,C}
+]
+
+    \addplot coordinates {
+        (A,10)
+        (B,3)
+        (C,15)
+    };
+
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    symbolic x coords={A,B,C,D,E,F,G,H,I,J}
+]
+
+    \addplot coordinates {
+        (A,10)
+        (B,3)
+        (C,15)
+        (D,10)
+        (E,3)
+        (F,15)
+        (G,10)
+        (H,3)
+        (I,15)
+        (J,15)
+    };
+
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    symbolic x coords={A,B,C,D,E,F,G,H,I,J}
+]
+
+    \addplot coordinates {
+        (A,10)
+        (B,3)
+        (C,15)
+    };
+
+\end{axis}
+\end{tikzpicture}
+
+
 \subsection{With CSV}
 
 \begin{tikzpicture}
@@ -1788,6 +2051,126 @@ x^2 \quad x
 \end{axis}
 \end{tikzpicture}
 
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    symbolic x coords={A,B,C},
+    xtick=data,
+    enlargelimits=0.0
+]
+
+    \addplot[color=blue!50,
+             fill=blue!50] coordinates {
+        (A,10)
+        (B,3)
+        (C,15)
+    };
+
+    \addplot[color=mycolor1,
+             fill=mycolor1] coordinates {
+        (A,4)
+        (B,8)
+        (C,5)
+    };
+
+    \addplot[color=red!50,
+             fill=red!50] coordinates {
+        (A,14)
+        (B,18)
+        (C,15)
+    };
+
+    \node at (axis cs:A,14) [above] {Point 1};
+    \node at (axis cs:B,18) [above] {Point 2};
+    \draw[->] (axis cs:B,18) -- (axis cs:C,15) node[below] {Point 3};
+
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+    xbar,
+    symbolic y coords={A,B,C},
+    ytick=data,
+    enlargelimits=0.15
+]
+
+    \addplot[color=blue!50,
+             fill=blue!50] coordinates {
+        (10,A)
+        (3,B)
+        (15,C)
+    };
+
+    \addplot[color=mycolor1,
+             fill=mycolor1] coordinates {
+        (4,A)
+        (8,B)
+        (5,C)
+    };
+
+    \addplot[color=red!50,
+             fill=red!50] coordinates {
+        (14,A)
+        (18,B)
+        (15,C)
+    };
+
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    symbolic x coords={A,B,C},
+    xtick=data,
+    enlargelimits=0.2,
+    bar width=10pt,
+    ymin=0
+]
+
+    % --- Bars ---
+    \addplot[fill=blue!50] coordinates {(A,10) (B,3) (C,15)};
+    \addplot[fill=orange!70] coordinates {(A,4) (B,8) (C,5)};
+    \addplot[fill=red!50] coordinates {(A,14) (B,18) (C,15)};
+
+    % --- Line over bars (example: average of the 3) ---
+    \addplot[
+        blue,
+        thick,
+        mark=*,
+        smooth
+    ] coordinates {
+        (A,9.33)
+        (B,9.67)
+        (C,11.67)
+    };
+
+    \addplot[
+        orange,
+        thick,
+        mark=*,
+        smooth
+    ] coordinates {
+        (A,8.33)
+        (B,9.07)
+        (C,10.67)
+    };
+
+    \addplot[
+        red,
+        thick,
+        mark=*,
+        smooth
+    ] coordinates {
+        (A,8.93)
+        (B,7.07)
+        (C,12.67)
+    };
+
+\end{axis}
+\end{tikzpicture}
+
 \subsection{Histogramms + CSV}
 
 \begin{tikzpicture}
@@ -1800,6 +2183,61 @@ x^2 \quad x
         mark=none
     ] table[col sep=comma,
             y=value] {histogramm.csv};
+
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}
+
+    \addplot[
+        hist={bins=5, data min=1, data max=7, density},
+        fill=blue!30,
+        draw=black,
+        mark=none
+    ] table[col sep=comma,
+            y=value] {histogramm.csv};
+
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}
+
+    \addplot[
+        hist={bins=5, data min=1, data max=7, density},
+        fill=blue!30,
+        draw=black,
+        %mark=none
+    ] table[col sep=comma,
+            y=value] {histogramm.csv};
+
+\end{axis}
+\end{tikzpicture}
+
+Rotation
+
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={Density},
+    ylabel={Value},
+]
+
+\addplot+[
+    hist={
+        bins=5,
+        data min=1,
+        data max=7,
+        density,
+        handler/.style={xbar}
+    },
+    fill=blue!30,
+    draw=black,
+]
+table[
+    col sep=comma,
+    y=value
+] {histogramm.csv};
 
 \end{axis}
 \end{tikzpicture}
@@ -1826,13 +2264,56 @@ x^2 \quad x
 \end{axis}
 \end{tikzpicture}
 
+\subsection{Constant plots}
+
+\begin{tikzpicture}
+  \begin{axis}
+    \addplot+[const plot]
+      coordinates
+        {(0,0.1) (0.1,0.15) (0.2,0.5) (0.3,0.62)
+         (0.4,0.56) (0.5,0.58) (0.6,0.65) (0.7,0.6)
+         (0.8,0.58) (0.9,0.55) (1,0.52)};
+  \end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}
+
+    \addplot[const plot, 
+             mark=square*, 
+             color=blue]
+      table [col sep=comma, x=x, y=y] {cnst.csv};
+
+\end{axis}
+\end{tikzpicture}
+
+Define custom options name.
+
+\begin{tikzpicture}
+\begin{axis}
+
+    \pgfplotsset{
+        my step plot/.style={
+            const plot,
+            mark=*,
+            color=blue,
+            thick
+        }
+    }
+
+    \addplot[my step plot]
+    table [col sep=comma, x=x, y=y] {cnst.csv};
+
+\end{axis}
+\end{tikzpicture}
+
+
 \subsection{Horizontal Boxplots + CSV}
 
 \begin{tikzpicture}
 \begin{axis}
 
-    % +[...] keeps default, only add
-    \addplot+[
+    \addplot[
         boxplot
     ] table[col sep=comma, 
             y=value] {boxplot.csv};
@@ -1840,7 +2321,8 @@ x^2 \quad x
 \end{axis}
 \end{tikzpicture}
 
-\subsection{Multiple histogramms + CSV}
+
+\subsection{Multiple boxplots + CSV}
 
 \begin{tikzpicture}
 \begin{axis}[
@@ -1927,16 +2409,34 @@ x^2 \quad x
 \end{tikzpicture}
 
 \subsubsection{With CSV}
-
+ 
 %\begin{tikzpicture}
 %
 %    \pie[
 %        color={blue!20, red!20,purple!20},
 %        text=pin,
 %        explode=0.1
-%    ]table[col sep=comma, label=label, value=value] {pie.csv}
+%    ] table[col sep=comma, label=label, value=value] {pie.csv}
 %
 %\end{tikzpicture}
+
+%\pgfplotstableread[col sep=comma]{pie.csv}\datatable
+% 
+%\begin{tikzpicture}
+%
+%\pie[
+%    color={blue!20, red!20, purple!20},
+%    text=pin,
+%    explode=0.1
+%]
+%{
+%\pgfplotstableforeachcolumnelement{value}\of\datatable\as\val{%
+%    \pgfplotstablegetelem{\pgfplotstablerow}{label}\of\datatable
+%    \pgfplotsretval/\val,
+%}
+%}
+%\end{tikzpicture}
+ 
 
 \subsection{HeatMaps}
 
