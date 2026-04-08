@@ -145,7 +145,7 @@
 \pgfplotsset{compat=1.18}
 
 \pgfplotsset{ %define custom pgfplot theme, heatmap
-  colormap={inferno}{
+  colormap={myinferno}{
     rgb255(0cm)=(0,0,4);
     rgb255(1cm)=(31,12,72);
     rgb255(2cm)=(85,15,109);
@@ -2362,7 +2362,7 @@ Define custom options name.
         xticklabels={A,B,C}
     ]
 
-    \addplot+[
+    \addplot[
         boxplot,
         boxplot/draw direction=y,
         boxplot/draw position=1,
@@ -2370,7 +2370,7 @@ Define custom options name.
     ] table[col sep=comma, 
             y=value] {boxplot.csv};
 
-    \addplot+[
+    \addplot[
         boxplot,
         boxplot/draw direction=y,
         boxplot/draw position=2,
@@ -2378,13 +2378,60 @@ Define custom options name.
     ] table[col sep=comma, 
             y=value] {boxplot.csv};
 
-    \addplot+[
+    \addplot[
         boxplot,
         boxplot/draw direction=y,
         boxplot/draw position=3,
         fill=orange!20
     ] table[col sep=comma, 
             y=value] {boxplot.csv};
+
+\end{axis}
+\end{tikzpicture}
+
+And we add the points...
+
+\begin{tikzpicture}
+\begin{axis}[
+    width=12cm,
+    height=8cm,
+    xtick={1,2,3},
+    xticklabels={[0--1],[1--2],[2--3]},
+    xlabel={X bins},
+    ylabel={Y values},
+]
+
+    \addplot[
+        boxplot,
+        boxplot/draw direction=y,
+        boxplot/draw position=1,
+        fill=blue!20
+    ] table[col sep=comma, y=y] {bin1.csv};
+    
+    \addplot[
+        boxplot,
+        boxplot/draw direction=y,
+        boxplot/draw position=2,
+        fill=red!20
+    ] table[col sep=comma, y=y] {bin2.csv};
+    
+    \addplot[
+        boxplot,
+        boxplot/draw direction=y,
+        boxplot/draw position=3,
+        fill=orange!20
+    ] table[col sep=comma, y=y] {bin3.csv};
+    
+    \addplot[
+        only marks,
+        mark=*,
+        opacity=0.6
+    ]
+    table[
+        col sep=comma,
+        x expr=floor(\thisrow{x}) + 1 + 0.15*(rand-0.5),
+        y=y
+    ] {data.csv};
 
 \end{axis}
 \end{tikzpicture}
@@ -2480,7 +2527,7 @@ Define custom options name.
  
 \begin{tikzpicture}
 \begin{axis}[colorbar, 
-             colormap name=inferno]
+             colormap name=myinferno]
 
     \addplot[matrix plot,
              mesh/cols=3,
@@ -2502,7 +2549,7 @@ Here the vertical line is Z, the horizontal is the X, the depth is the Y
              ylabel=$y$,
              zlabel=$z$,
              colorbar,
-             colormap name=inferno]
+             colormap name=myinferno]
 
     \addplot3[surf,
               domain=-2:2, 
@@ -3330,7 +3377,7 @@ Now, X=-50
               scatter,
               scatter src = explicit,
               mark=*,
-              colormap name=inferno] coordinates {
+              colormap name=myinferno] coordinates {
     (1,2,3) [0.6]
     (2,1,4) [0.2]
     (3,3,2) [0.9]
