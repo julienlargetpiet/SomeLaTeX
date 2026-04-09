@@ -2588,6 +2588,35 @@ Here the vertical line is Z, the horizontal is the X, the depth is the Y
 
 \end{tikzpicture}
 
+\newcommand{\myrectangle}[2]{
+    \draw (#1) -- (#2|-#1) -- (#2) -- (#1|-#2) -- cycle;
+}
+
+\begin{tikzpicture}
+
+    \myrectangle{0,0}{3,2};
+
+\end{tikzpicture}
+
+\makeatletter
+\tikzset{
+    my rectangle/.style={
+        to path={
+            -- (\tikztotarget|- \tikztostart)
+            -- (\tikztotarget)
+            -- (\tikztostart|- \tikztotarget)
+            -- cycle
+        }
+    }
+}
+\makeatother
+
+\begin{tikzpicture}
+
+    \draw (0,0) to[my rectangle] (3,2);
+
+\end{tikzpicture}
+
 \subsection{Cirlce}
 
 \begin{tikzpicture}
@@ -2596,7 +2625,7 @@ Here the vertical line is Z, the horizontal is the X, the depth is the Y
 
 \end{tikzpicture}
 
-\subsection{Elips}
+\subsection{Elipse}
 
 \begin{tikzpicture}
 
